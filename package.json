@@ -1,0 +1,33 @@
+{
+  "name": "logdc",
+  "version": "1.0.0",
+  "description": "Simple console log for NodeJs with colors and datestamp",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/easingthemes/logdc.git"
+  },
+  "keywords": [
+    "console",
+    "log",
+    "console",
+    "log",
+    "node",
+    "colors",
+    "date",
+    "date-stamp",
+    "debug",
+    "logging",
+    "simple",
+    "easy"
+  ],
+  "author": "Dragan Filipovic",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/easingthemes/logdc/issues"
+  },
+  "homepage": "https://github.com/easingthemes/logdc#readme"
+}
