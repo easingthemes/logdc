@@ -29,29 +29,55 @@ const config = {
 };
 
 const helpers = {
-    getParams(noColor, counter, label, labelLength, color, data) {
-        const colorize = data.slice(0, counter),
-            plain = data.slice(counter);
+    /**
+     * Get list of parameters to log
+     * @param {boolean} noDate
+     * @param {number} counter
+     * @param {string} label
+     * @param {number|boolean} labelLength
+     * @param {string} color
+     * @param {*} data - input data
+     * @return {Array}
+     */
+    getParams(noDate, counter, label, labelLength, color, data) {
+        const hasColor = counter && counter > 0,
+            hasLabel = label && label.length > 0 && labelLength > 0,
+            list = [];
 
-        if (noColor) {
-            return [
-                this.dateNow(),
-                this.formatLabel(label, labelLength),
-                this.prettify(data, true)
-            ];
+        let formatLabel,
+            labelLine = hasLabel ? this.formatLabel(label, labelLength) : '';
+
+        if (label === 'br') {
+            labelLine = config.separator;
+        }
+        // Add time
+        if (!noDate) {
+            list.push(this.dateNow());
+        }
+        // Add label
+        if (labelLine !== '') {
+            formatLabel = hasColor ? this.setColor(color, labelLine) : labelLine;
+            list.push(formatLabel);
+        }
+        // Add data
+        if (hasColor) {
+            list.push(this.setColor(color, data.slice(0, counter - 1)));
+            list.push(this.prettify(data.slice(counter - 1), true));
+        } else {
+            list.push(this.prettify(data, true));
         }
 
-        return [
-            this.dateNow(),
-            this.setColor(color, this.formatLabel(label, labelLength)),
-            this.setColor(color, colorize),
-            this.prettify(plain, true)
-        ];
+        return list;
     },
-
+    /**
+     * Format label
+     * @param {string} label
+     * @param {number|boolean} labelLength
+     * @return {string}
+     */
     formatLabel(label, labelLength) {
-        if (label === 'br') {
-            return config.separator;
+        if (!label || label.length === 0) {
+            return '';
         }
 
         const formattedLabel = `${label.toUpperCase()}: `;
@@ -64,7 +90,10 @@ const helpers = {
 
         return `${formattedLabel}${spaces}`;
     },
-
+    /**
+     * Format date string
+     * @return {string}
+     */
     dateNow() {
         const now = new Date(),
             fullTime = (time) => {
@@ -79,24 +108,38 @@ const helpers = {
 
         return `[${this.setColor('grey', dateNow)}]`
     },
+    /**
+     * Set color to data
+     * @param {string} color
+     * @param {*} data
+     * @return {string}
+     */
+    setColor(color, data) {
+        const colors = this.getColors(config.colors),
+            colorKey = color && color.length > 0 ? color : 'white';
 
+        return `${colors[colorKey]}${this.prettify(data)}${colors.reset}`;
+    },
+    /**
+     * Get color codes
+     * @param {Object} colorsConfig
+     * @return {Object}
+     */
     getColors(colorsConfig) {
         const colors = {};
 
-        Object.entries(colorsConfig).forEach(color => {
-            colors[color[0]] = `\u001b[${color[1]}m`;
+        Object.keys(colorsConfig).forEach(color => {
+            colors[color] = `\u001b[${colorsConfig[color]}m`;
         });
 
         return colors;
     },
-
-    setColor(color, data) {
-        const colors = this.getColors(config.colors);
-
-        return `${colors[color]}${this.prettify(data)}${colors.reset}`;
-    },
-
-    prettify(data, depth = null) {
+    /**
+     * Show all data as string
+     * @param {*} data
+     * @return {string}
+     */
+    prettify(data) {
         if (
             !data ||
             (Array.isArray(data) && data.length === 0) ||
@@ -114,32 +157,54 @@ const helpers = {
 
         return data.map(item => {
             return util.inspect(item, {
-                depth
+                depth: null
             });
         }).join(', ');
     }
 };
 
-const createLogs = (configLabels, counter, isEqualLength, noColor) => {
+/**
+ *
+ * @param {object|boolean} configLabels
+ * @param {number} counter
+ * @param {boolean} isEqualLength
+ * @param {boolean} noDate
+ * @return {Object}
+ */
+const createLogs = (configLabels, counter, isEqualLength, noDate) => {
+
     const log = {},
         logLabels =  Object.assign(config.labels, configLabels);
-    let labelLength = config.labelLength;
+    let labelLength = 0;
 
-    Object.keys(logLabels).forEach(label => {
-        labelLength = label.length > labelLength ? label.length : labelLength;
-    });
+    if (configLabels) {
+        labelLength = config.labelLength;
 
-    if (!isEqualLength) {
-        labelLength = false;
+        Object.keys(logLabels).forEach(label => {
+            labelLength = label.length > labelLength ? label.length : labelLength;
+        });
+
+        if (!isEqualLength) {
+            labelLength = false;
+        }
     }
 
-    Object.entries(logLabels).forEach(label => {
-        const type = config.standard.indexOf(label[0]) > -1 ? label[0] : 'log';
+    Object.keys(logLabels).forEach(label => {
+        const type = config.standard.indexOf(label) > -1 ? label : 'log';
 
-        log[label[0]] = (...data) => console[type](...helpers.getParams(noColor, counter, label[0], labelLength, label[1], data));
+        log[label] = (...data) => console[type](...helpers.getParams(
+            noDate,
+            counter,
+            label,
+            labelLength,
+            logLabels[label],
+            data
+        ));
     });
 
     return log;
 };
 
-module.exports = (config = {}, counter = 1, isEqualLength = true, noColor) => createLogs(config, counter, isEqualLength, noColor);
+const logdc = (config = {}, counter = 1, isEqualLength = true, noDate) => createLogs(config, counter, isEqualLength, noDate);
+
+module.exports = logdc;
