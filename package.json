@@ -4,7 +4,7 @@
   "description": "Simple console log for NodeJs with colors and datestamp",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --reporter spec"
   },
   "repository": {
     "type": "git",
@@ -29,5 +29,14 @@
   "bugs": {
     "url": "https://github.com/easingthemes/logdc/issues"
   },
-  "homepage": "https://github.com/easingthemes/logdc#readme"
+  "homepage": "https://github.com/easingthemes/logdc#readme",
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^3.5.0",
+    "sinon": "^3.2.1",
+    "sinon-chai": "^2.13.0"
+  }
 }
