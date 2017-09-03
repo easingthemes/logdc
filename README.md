@@ -90,7 +90,7 @@ log.error('Lorem Ipsum');
 // console
 $[19:15:46] INFO: 'Lorem Ipsum'
 $[19:15:46] ERROR: 'Lorem Ipsum'
-	```
+```
 
 2. Time
 
