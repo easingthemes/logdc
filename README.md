@@ -1,5 +1,5 @@
 # logdc
-Simple console log for NodeJs with colors and datestamp.
+Simple console log for NodeJs with colors and timestamp.
 0 dependencies.
 
 
