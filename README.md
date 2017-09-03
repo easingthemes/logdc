@@ -50,9 +50,11 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ## Settings
 
 1. Labels
-	Label is uppercase type name
+
+Label is uppercase type name
 
 	1.1. Hide labels - first argument
+
 	```
 	const log = require(logdc)(false);
 
@@ -62,6 +64,7 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	```
 
 	1.2. Add custom labels - first argument
+
 	```
 	const log = require(logdc)({
 		custom: 'red',
@@ -73,8 +76,10 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	```
 
 	1.3. Equal length - second argument
+
 	Length of labels (type name + spaces + ':') is equal to longest type name (default 8 `SUCCESS :`),
 	so that colon is always at the same vertical position. To disable this behaviour pass second argument as `false`
+
 	```
 	const log = require(logdc)({}, false);
 
@@ -86,6 +91,7 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	```
 
 2. Time
+
 To hide timestamp pass third argument as `true`
 
 ```
@@ -96,7 +102,9 @@ $INFO    : 'Lorem Ipsum'
 ```
 
 3. Colors
+
 Label name has color.
+
 Fourth argument is defining number of logged to colorize, default is 1, or colorize just label.
 
 	3.1. To disable colors pass fourth argument as `0`
@@ -141,6 +149,7 @@ const log = require(logdc)(
 ```
 
 ## Examples
+
 ```
 log.info('Lorem Ipsum', {foo: ['bar']}, [1, 2, 3], 'Dolorem')
 $[17:03:26] INFO    : 'Lorem Ipsum', { foo: [ 'bar' ] }, [ 1, 2, 3 ], 'Dolorem'
