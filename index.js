@@ -17,14 +17,13 @@ const config = {
     labels: {
         log:     'white',
         info:    'white',
-        warning: 'yellow',
+        warn:    'yellow',
         error:   'red',
         start:   'blue',
         success: 'green',
         br:      'white'
     },
     standard:    ['log', 'info', 'warn', 'error'],
-    labelLength: 10,
     separator:   ':::::::::::::::::::::::::::::::::::::::::::::::::::::::::'
 };
 
@@ -80,15 +79,14 @@ const helpers = {
             return '';
         }
 
-        const formattedLabel = `${label.toUpperCase()}: `;
+        const formattedLabel = label.toUpperCase();
 
         if (!labelLength) {
-            return formattedLabel;
+            return `${formattedLabel} :`;
         }
 
         const spaces = ` `.repeat(labelLength - formattedLabel.length);
-
-        return `${formattedLabel}${spaces}`;
+        return `${formattedLabel}${spaces} :`;
     },
     /**
      * Format date string
@@ -178,7 +176,6 @@ const createLogs = (configLabels, counter, isEqualLength, noDate) => {
     let labelLength = 0;
 
     if (configLabels) {
-        labelLength = config.labelLength;
 
         Object.keys(logLabels).forEach(label => {
             labelLength = label.length > labelLength ? label.length : labelLength;
@@ -205,6 +202,6 @@ const createLogs = (configLabels, counter, isEqualLength, noDate) => {
     return log;
 };
 
-const logdc = (config = {}, counter = 1, isEqualLength = true, noDate) => createLogs(config, counter, isEqualLength, noDate);
+const logdc = (config = {}, isEqualLength = true, noDate, counter = 1) => createLogs(config, counter, isEqualLength, noDate);
 
 module.exports = logdc;
