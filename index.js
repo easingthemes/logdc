@@ -81,7 +81,7 @@ const helpers = {
 
         const formattedLabel = label.toUpperCase();
 
-        if (!labelLength) {
+        if (!labelLength || labelLength === 1) {
             return `${formattedLabel} :`;
         }
 
@@ -182,7 +182,7 @@ const createLogs = (configLabels, counter, isEqualLength, noDate) => {
         });
 
         if (!isEqualLength) {
-            labelLength = false;
+            labelLength = 1;
         }
     }
 

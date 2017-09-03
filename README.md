@@ -152,6 +152,8 @@ const log = require(logdc)(
 
 ## Examples
 
+![Logdc examples](/logdc.png?raw=true "Examples")
+
 ```
 log.info('Lorem Ipsum', {foo: ['bar']}, [1, 2, 3], 'Dolorem')
 $[17:03:26] INFO    : 'Lorem Ipsum', { foo: [ 'bar' ] }, [ 1, 2, 3 ], 'Dolorem'
