@@ -23,6 +23,7 @@ $[19:15:46] INFO    : 'Lorem Ipsum', { foo: [ 'bar' ] }, [ 1, 2, 3 ], 'Dolorem'
 ```
 
 ## Types (Default)
+
 ```
 // code
 log.info('Lorem Ipsum');
@@ -42,6 +43,7 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ```
 
 ## Separator
+
 ```
 log.br();
 $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -53,41 +55,41 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 Label is uppercase type name
 
-	1.1. Hide labels - first argument
+ 1.1. Hide labels - first argument
 
-	```
-	const log = require(logdc)(false);
+```
+const log = require(logdc)(false);
 
-	log.info('Lorem Ipsum');
-	$[19:19:25] 'Lorem Ipsum'
+log.info('Lorem Ipsum');
+$[19:19:25] 'Lorem Ipsum'
 
-	```
+```
 
-	1.2. Add custom labels - first argument
+ 1.2. Add custom labels - first argument
 
-	```
-	const log = require(logdc)({
-		custom: 'red',
-		foo: 'green'
-	});
+```
+const log = require(logdc)({
+	custom: 'red',
+	foo: 'green'
+});
 
-	log.foo('Lorem Ipsum');
-	$[19:15:46] FOO     : 'Lorem Ipsum'
-	```
+log.foo('Lorem Ipsum');
+$[19:15:46] FOO     : 'Lorem Ipsum'
+```
 
-	1.3. Equal length - second argument
+ 1.3. Equal length - second argument
 
-	Length of labels (type name + spaces + ':') is equal to longest type name (default 8 `SUCCESS :`),
-	so that colon is always at the same vertical position. To disable this behaviour pass second argument as `false`
+Length of labels (type name + spaces + ':') is equal to longest type name (default 8 `SUCCESS :`),
+so that colon is always at the same vertical position. To disable this behaviour pass second argument as `false`
 
-	```
-	const log = require(logdc)({}, false);
+```
+const log = require(logdc)({}, false);
 
-	log.info('Lorem Ipsum');
-    log.error('Lorem Ipsum');
-    // console
-	$[19:15:46] INFO: 'Lorem Ipsum'
-    $[19:15:46] ERROR: 'Lorem Ipsum'
+log.info('Lorem Ipsum');
+log.error('Lorem Ipsum');
+// console
+$[19:15:46] INFO: 'Lorem Ipsum'
+$[19:15:46] ERROR: 'Lorem Ipsum'
 	```
 
 2. Time
@@ -107,35 +109,35 @@ Label name has color.
 
 Fourth argument is defining number of logged to colorize, default is 1, or colorize just label.
 
-	3.1. To disable colors pass fourth argument as `0`
+ 3.1. To disable colors pass fourth argument as `0`
 
-	```
-	const log = require(logdc)({}, true, true, 0);
+```
+const log = require(logdc)({}, true, true, 0);
 
-	log.info('Lorem Ipsum');
-	$[19:15:46] INFO    : 'Lorem Ipsum'
-	```
+log.info('Lorem Ipsum');
+$[19:15:46] INFO    : 'Lorem Ipsum'
+```
 
-	3.2. To add colors to other logged parameters increase fourth parameter (`1` is for label)
+ 3.2. To add colors to other logged parameters increase fourth parameter (`1` is for label)
 
-	```
-	const log = require(logdc)({}, true, true, 3);
+```
+const log = require(logdc)({}, true, true, 3);
 
-	log.info('Lorem Ipsum', {foo: 'bar'});
-	$[19:15:46] INFO    : 'Lorem Ipsum', { foo: 'bar' }
-	```
+log.info('Lorem Ipsum', {foo: 'bar'});
+$[19:15:46] INFO    : 'Lorem Ipsum', { foo: 'bar' }
+```
 
-	3.3. To change color of default label use first argument
+ 3.3. To change color of default label use first argument
 
-	```
-	const log = require(logdc)({
-		info: 'red',
-		error: 'green'
-	});
+```
+const log = require(logdc)({
+	info: 'red',
+	error: 'green'
+});
 
-	log.error('Lorem Ipsum');
-	$[19:15:46] ERROR   : 'Lorem Ipsum'
-	```
+log.error('Lorem Ipsum');
+$[19:15:46] ERROR   : 'Lorem Ipsum'
+```
 
 ## Default arguments
 
