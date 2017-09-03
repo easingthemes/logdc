@@ -51,7 +51,7 @@ $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Settings
 
-1. Labels
+####1. Labels
 
 Label is uppercase type name
 
@@ -92,7 +92,7 @@ $[19:15:46] INFO: 'Lorem Ipsum'
 $[19:15:46] ERROR: 'Lorem Ipsum'
 ```
 
-2. Time
+####2. Time
 
 To hide timestamp pass third argument as `true`
 
@@ -103,7 +103,7 @@ log.info('Lorem Ipsum');
 $INFO    : 'Lorem Ipsum'
 ```
 
-3. Colors
+####3. Colors
 
 Label name has color.
 
