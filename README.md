@@ -2,6 +2,8 @@
 Simple console log for NodeJs with colors and timestamp.
 0 dependencies.
 
+![Logdc example](/logdc-intro.png?raw=true "Examples")
+
 
 ## Installation
 
