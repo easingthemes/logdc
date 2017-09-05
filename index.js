@@ -15,22 +15,42 @@ const config = {
         cyan:    36
     },
     labels: {
-        log:     'white',
-        info:    'white',
-        warn:    'yellow',
-        error:   'red',
-        start:   'blue',
-        success: 'green',
-        br:      'white'
+        log:     {
+            color: 'white',
+            text: 'log'
+        },
+        info:    {
+            color: 'white',
+            text: 'info'
+        },
+        warn:    {
+            color: 'yellow',
+            text: 'warning'
+        },
+        error:   {
+            color: 'red',
+            text: 'error'
+        },
+        start:   {
+            color: 'blue',
+            text: 'start'
+        },
+        success: {
+            color: 'green',
+            text: 'success'
+        },
+        br:      {
+            color: 'white',
+            text: ':'
+        }
     },
-    standard:    ['log', 'info', 'warn', 'error'],
-    separator:   ':::::::::::::::::::::::::::::::::::::::::::::::::::::::::'
+    standard:    ['log', 'info', 'warn', 'error']
 };
 
 const helpers = {
     /**
      * Get list of parameters to log
-     * @param {boolean} noDate
+     * @param {boolean} showTime
      * @param {number} counter
      * @param {string} label
      * @param {number|boolean} labelLength
@@ -38,7 +58,7 @@ const helpers = {
      * @param {*} data - input data
      * @return {Array}
      */
-    getParams(noDate, counter, label, labelLength, color, data) {
+    getParams(key, label, labelLength, color, showTime, counter, data) {
         const hasColor = counter && counter > 0,
             hasLabel = label && label.length > 0 && labelLength > 0,
             list = [];
@@ -46,11 +66,11 @@ const helpers = {
         let formatLabel,
             labelLine = hasLabel ? this.formatLabel(label, labelLength) : '';
 
-        if (label === 'br') {
-            labelLine = config.separator;
+        if (key === 'br') {
+            labelLine = label.repeat(80);
         }
         // Add time
-        if (!noDate) {
+        if (showTime) {
             list.push(this.dateNow());
         }
         // Add label
@@ -61,9 +81,9 @@ const helpers = {
         // Add data
         if (hasColor) {
             list.push(this.setColor(color, data.slice(0, counter - 1)));
-            list.push(this.prettify(data.slice(counter - 1), true));
+            list.push(this.prettify(data.slice(counter - 1)));
         } else {
-            list.push(this.prettify(data, true));
+            list.push(this.prettify(data));
         }
 
         return list;
@@ -160,41 +180,62 @@ const helpers = {
         }).join(', ');
     }
 };
-
 /**
  *
- * @param {object|boolean} configLabels
- * @param {number} counter
- * @param {boolean} isEqualLength
- * @param {boolean} noDate
  * @return {Object}
  */
-const createLogs = (configLabels, counter, isEqualLength, noDate) => {
-
-    const log = {},
-        logLabels =  Object.assign(config.labels, configLabels);
-    let labelLength = 0;
-
-    if (configLabels) {
-
-        Object.keys(logLabels).forEach(label => {
-            labelLength = label.length > labelLength ? label.length : labelLength;
-        });
-
-        if (!isEqualLength) {
-            labelLength = 1;
-        }
+const getConfig = () => {
+    let configJson;
+    try {
+        const { logdcConfig } = require('../package.json');
+        configJson = logdcConfig || {};
+    } catch (err) {
+        configJson = {};
     }
 
-    Object.keys(logLabels).forEach(label => {
-        const type = config.standard.indexOf(label) > -1 ? label : 'log';
+    const { labels = {}, time = true, equal = true, counter = 2} = configJson;
 
-        log[label] = (...data) => console[type](...helpers.getParams(
-            noDate,
+    let labelsLength = 0,
+        logLabels = config.labels;
+
+    if (labels) {
+            logLabels =  Object.assign({}, config.labels, labels);
+
+            const textLength = Object.keys(logLabels).map(key => {
+                const { text = '' } = logLabels[key];
+                return text.length;
+            });
+
+        labelsLength = equal ? Math.max(...textLength) : 1;
+    }
+
+    return {
+        logLabels,
+        labelsLength,
+        time,
+        counter
+    };
+};
+/**
+ *
+ * @return {Object}
+ */
+const logdc = () => {
+    const { logLabels, labelsLength, time, counter } = getConfig(),
+        log = {};
+
+    Object.keys(logLabels).forEach(key => {
+        const type = config.standard.indexOf(key) > -1 ? key : 'log',
+            defaultLabel = config.labels[key] || {},
+            { text = defaultLabel.text || '' , color = defaultLabel.color || 'white' } = logLabels[key];
+
+        log[key] = (...data) => console[type](...helpers.getParams(
+            key,
+            text,
+            labelsLength,
+            color,
+            time,
             counter,
-            label,
-            labelLength,
-            logLabels[label],
             data
         ));
     });
@@ -202,6 +243,4 @@ const createLogs = (configLabels, counter, isEqualLength, noDate) => {
     return log;
 };
 
-const logdc = (config = {}, isEqualLength = true, noDate, counter = 1) => createLogs(config, counter, isEqualLength, noDate);
-
-module.exports = logdc;
+module.exports = logdc();

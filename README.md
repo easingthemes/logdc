@@ -16,7 +16,7 @@ $ yarn add logdc
 ## Usage
 
 ```
-const log = require(logdc)();
+const log = require(logdc);
 
 log.info('Lorem Ipsum', {foo: ['bar']}, [1, 2, 3], 'Dolorem');
 $[19:15:46] INFO    : 'Lorem Ipsum', { foo: [ 'bar' ] }, [ 1, 2, 3 ], 'Dolorem'
@@ -49,42 +49,85 @@ log.br();
 $[19:15:46] :::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 ```
 
+To change separator character override default settings for label `br`.
+
 ## Settings
+
+Override default settings or create new labels in your `package.json` file.
+
+Add `logdcConfig` node:
+
+```
+  "logdcConfig": {
+    "labels": {
+      "foo": {
+        "color": "red",
+        "text": "My Custom label"
+      },
+      "warn": {
+        "color": "green",
+        "text": "Do not warn me!"
+      }
+    },
+    "time": true,
+    "counter": 2,
+    "equal": true
+  }
+```
 
 #### 1. Labels
 
-Label is uppercase type name
-
- 1.1. Hide labels - first argument
+ 1.1. Hide labels
 
 ```
-const log = require(logdc)(false);
+  "logdcConfig": {
+    "labels": false
+  }
+```
 
+```
 log.info('Lorem Ipsum');
+
 $[19:19:25] 'Lorem Ipsum'
 
 ```
 
- 1.2. Add custom labels - first argument
-
+ 1.2. Add custom labels, or override default
 ```
-const log = require(logdc)({
-	custom: 'red',
-	foo: 'green'
-});
-
+"logdcConfig": {
+    "labels": {
+        "foo": {
+            "color": "red",
+            "text": "My Custom label"
+        },
+        "warn": {
+            "color": "green",
+            "text": "Do not warn me!"
+        }
+    }
+}
+```
+ 
+```
 log.foo('Lorem Ipsum');
 $[19:15:46] FOO     : 'Lorem Ipsum'
+
+log.warn('Lorem Ipsum');
+$[19:15:46] DO NOT WARN ME! : 'Lorem Ipsum'
 ```
 
- 1.3. Equal length - second argument
+ 1.3. Equal length
 
 Length of labels (type name + spaces + ':') is equal to longest type name (default 8 `SUCCESS :`),
-so that colon is always at the same vertical position. To disable this behaviour pass second argument as `false`
+so that colon is always at the same vertical position. To disable this behaviour set `equal` as `false`
 
 ```
-const log = require(logdc)({}, false);
+"logdcConfig": {
+    "equal": false
+}
+```
 
+```
 log.info('Lorem Ipsum');
 log.error('Lorem Ipsum');
 // console
@@ -94,11 +137,15 @@ $[19:15:46] ERROR: 'Lorem Ipsum'
 
 #### 2. Time
 
-To hide timestamp pass third argument as `true`
+To hide timestamp set `time` to `false`
 
 ```
-const log = require(logdc)({}, true, false);
+"logdcConfig": {
+    "time": false
+}
+```
 
+```
 log.info('Lorem Ipsum');
 $INFO    : 'Lorem Ipsum'
 ```
@@ -107,47 +154,90 @@ $INFO    : 'Lorem Ipsum'
 
 Label name has color.
 
-Fourth argument is defining number of logged to colorize, default is 1, or colorize just label.
+Config `counter` is defining number of logged arguments to colorize, default is 2, or colorize label and first argument.
 
- 3.1. To disable colors pass fourth argument as `0`
+ 3.1. To disable colors pass set `counter` as `0`
 
 ```
-const log = require(logdc)({}, true, true, 0);
+"logdcConfig": {
+    "counter": 0
+}
+```
 
+```
 log.info('Lorem Ipsum');
 $[19:15:46] INFO    : 'Lorem Ipsum'
 ```
 
- 3.2. To add colors to other logged parameters increase fourth parameter (`1` is for label)
+ 3.2. To add colors to other logged parameters increase `counter` (`1` is for label)
 
 ```
-const log = require(logdc)({}, true, true, 3);
-
-log.info('Lorem Ipsum', {foo: 'bar'});
-$[19:15:46] INFO    : 'Lorem Ipsum', { foo: 'bar' }
+"logdcConfig": {
+    "counter": 4
+}
 ```
 
- 3.3. To change color of default label use first argument
+```
+log.info('Lorem Ipsum', {foo: 'bar'}, 'Third param');
+$[19:15:46] INFO    : 'Lorem Ipsum', { foo: 'bar' }, 'Third param'
+```
+
+ 3.3. To change color of default label set `labels` with default type as key:
+ 
+ ```
+ "logdcConfig": {
+     "labels": {
+         "error": {
+             "color": "white",
+             "text": "No errors"
+         },
+         "warn": {
+             "color": "green",
+             "text": "Do not warn me!"
+         }
+     }
+ }
+ ```
 
 ```
-const log = require(logdc)({
-	info: 'red',
-	error: 'green'
-});
-
 log.error('Lorem Ipsum');
-$[19:15:46] ERROR   : 'Lorem Ipsum'
+$[19:15:46] NO ERRORS : 'Lorem Ipsum'
 ```
 
 ## Default arguments
 
 ```
-const log = require(logdc)(
-	labels = {},
-	isEqualLength = true,
-	hideDate = false,
-	counter = 1
-);
+  "logdcConfig": {
+    "labels": {
+        "log": {
+            "color": "white",
+            "text": "log"
+        },
+        "info":    {
+            "color": "white",
+            "text": "info"
+        },
+        "warn":    {
+            "color": "yellow",
+            "text": "warning"
+        },
+        "error":   {
+            "color": "red",
+            "text": "error"
+        },
+        "success": {
+            "color": "green",
+            "text": "success"
+        },
+        "br":      {
+            "color: "white",
+            "text": ":"
+        }
+    },
+    "time": true,
+    "counter": 2,
+    "equal": true
+  }
 ```
 
 ## Examples
