@@ -1,6 +1,6 @@
 {
   "name": "logdc",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Simple console log for NodeJs with colors and timestamp",
   "main": "index.js",
   "scripts": {
