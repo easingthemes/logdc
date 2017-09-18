@@ -187,7 +187,7 @@ const helpers = {
 const getConfig = () => {
     let configJson;
     try {
-        const { logdcConfig } = require('../package.json');
+        const { logdcConfig } = require('../../package.json');
         configJson = logdcConfig || {};
     } catch (err) {
         configJson = {};
